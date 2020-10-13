@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -14,7 +16,12 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.amigoapps.vidyantrik.Data;
+import com.amigoapps.vidyantrik.DataAdapter;
 import com.amigoapps.vidyantrik.R;
+
+import java.util.ArrayList;
 
 
 /**
@@ -56,8 +63,8 @@ public class PlaceholderFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
 
         final TextView textView = root.findViewById(R.id.section_label);
-        final RecyclerView recyclerView = root.findViewById(R.id.recView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        final ListView listView = root.findViewById(R.id.list_view);
+
 
         pageViewModel.getText().observe(this, new Observer<String>()
         {
@@ -66,6 +73,15 @@ public class PlaceholderFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
+        pageViewModel.getData().observe(this, new Observer<ArrayList<Data>>() {
+            @Override
+            public void onChanged(ArrayList<Data> data) {
+                DataAdapter dataAdapter =new DataAdapter(getContext(),R.id.list_view,data);
+                listView.setAdapter(dataAdapter);
+            }
+        });
+
 
         return root;
     }
